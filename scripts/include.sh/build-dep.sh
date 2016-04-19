@@ -90,10 +90,13 @@ build_git_ios()
   echo finished
 
   if echo $library|grep '\.framework$'>/dev/null ; then
-    cd "$tmpdir/bin/Release"
-    defaults write "$tmpdir/bin/Release/$library/Resources/Info.plist" "git-rev" "$rev"
+    defaults write "$tmpdir/bin/Release-iphonesimulator/$library/Resources/Info.plist" "git-rev" "$rev"
+    defaults write "$tmpdir/bin/Release-iphoneos/$library/Resources/Info.plist" "git-rev" "$rev"
+    mv "$tmpdir/bin/Release-iphonesimulator" "$tmpdir/bin/iphonesimulator"
+    mv "$tmpdir/bin/Release-iphoneos" "$tmpdir/bin/iphoneos"
     mkdir -p "$resultdir/$name"
-    zip -qry "$resultdir/$name/$name-$version.zip" "$library"
+    cd "$tmpdir/bin"
+    zip -qry "$resultdir/$name/$name-$version.zip" "iphoneos/$library" "iphonesimulator/$library"
   else
     cd "$tmpdir/bin"
     mkdir -p "$name-$version/$name"
